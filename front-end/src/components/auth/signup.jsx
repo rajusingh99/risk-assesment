@@ -8,8 +8,6 @@ import {
   InputAdornment,
   Button,
   IconButton,
-  FormControlLabel,
-  Switch,
   Grid,
 } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -18,9 +16,11 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Constant } from "../constant/sidebarLinks";
 
-const Login = () => {
+const Signup = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
+    firsName:"",
+    lastName:"",
     email: "",
     password: "",
   });
@@ -67,8 +67,32 @@ const Login = () => {
             >
               <Stack spacing={2}>
                 <Typography align="center" component="h1" variant="h5" sx={{ mb: 1 ,color:"#434EB3"}}>
-                  Log in to bluOcean
+                  SignUp in bluOcean
                 </Typography>
+                <TextField
+                  size="small"
+                  value={formData.firsName}
+                  onChange={(e) => {
+                    handleChange(e, "firsName");
+                  }}
+                  sx={{pb:'15px'}}
+                  name="firsName"
+                  label="First Name"
+                  variant="outlined"
+                  required
+                />
+                <TextField
+                  size="small"
+                  value={formData.lastName}
+                  onChange={(e) => {
+                    handleChange(e, "lastName");
+                  }}
+                  sx={{pb:'15px'}}
+                  name="lastName"
+                  label="Last Name"
+                  variant="outlined"
+                  required
+                />
                 <TextField
                   size="small"
                   value={formData.email}
@@ -126,15 +150,14 @@ const Login = () => {
                       backgroundColor:  Constant.bgColor,
                     },
                     textTransform:'capitalize'
-                  
                   }}
                 >
-                Login
+                SignUp  
                 </Button>
                 <Box className="">
                   <Typography className="opacity-50">Want to know more about BluOcean? 
                   </Typography>
-                    <a href={'/signup'} style={{color:Constant.bgColor, }}>Sign Up</a>
+                    <a href={'/login'} style={{color:Constant.bgColor, }}>Login</a>
                 </Box>
               </Stack>
             </Paper>
@@ -144,4 +167,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

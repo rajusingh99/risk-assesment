@@ -6,9 +6,13 @@ import ScenarioCard from './components/ScenarioCard'
 import { Constant } from '../../../../constant/sidebarLinks'
 import SearchIcon from '@mui/icons-material/Search';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
+import TablePagination from '@mui/material/TablePagination';
 
 const RiskScenario = () => {
   const [sort, setSort] = React.useState('');
+  const [page, setPage] = React.useState(6);
+  const [rowsPerPage, setRowsPerPage] = React.useState(6);
+
     const route={
        title:"Library",
        subtitle:"risk-scenario"
@@ -16,6 +20,16 @@ const RiskScenario = () => {
 
     const handleSortChange = (event) => {
       setSort(event.target.value);
+    };
+
+  
+    const handleChangePage = (event, newPage) => {
+      setPage(newPage);
+    };
+  
+    const handleChangeRowsPerPage = (event) => {
+      setRowsPerPage(parseInt(event.target.value, 6));
+      setPage(0);
     };
   return (
     <Box sx={{display:'flex'}} >
@@ -55,6 +69,16 @@ const RiskScenario = () => {
       {
         Constant.RiskScenario.map((item,index)=><ScenarioCard item={item} index={index} />)
       }
+    <Box sx={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+      <TablePagination
+            component="div"
+            count={100}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+    </Box>
       </Box>
   </Box>
   )

@@ -10,12 +10,14 @@ import Library from './components/dashboard/Pages/Admin/Library/Library';
 import Assessment from './components/dashboard/Pages/Admin/Assessment/Assessment';
 import Reports from './components/dashboard/Pages/Admin/Reports/Reports';
 import RiskScenario from './components/dashboard/Pages/Admin/RiskScenario/RiskScenario';
+import Signup from './components/auth/signup';
 
 const App = () => {
   return (
     <div className="App">
         <Routes>
           <Route path='/login' element={<Login/>}/>
+          <Route path='/signup' element={<Signup/>}/>
           <Route path='/*' element={<Login/>}/>
           <Route path='/forgot-password' element={<ForgotPassword/>}/>
           <Route path='/update-password' element={<UpdatePassword/>}/>

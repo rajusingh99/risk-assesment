@@ -1,4 +1,4 @@
-import { Box, Grid, TextField } from '@mui/material'
+import { Box, Button, Grid, TextField } from '@mui/material'
 import React,{useState} from 'react'
 import SideBar from '../../../sidebar'
 import TopRoutes from '../TopRoutes/TopRoutes'
@@ -6,6 +6,7 @@ import ReportBarChart from './components/ReportBarChart'
 import ReportPiChart from './components/ReportPichart'
 import CustomBudget from './components/CustomBudget'
 import SummaryInput from './components/SummaryInput'
+import { Constant } from '../../../../constant/sidebarLinks'
 
 const Reports = () => {
   const route={
@@ -18,6 +19,9 @@ const Reports = () => {
     likelihood:"",
     custom_budget:""
 });
+  const handleSave =()=>{
+    
+  }
 
  const handleSummaryChange = (key,event) => {
   console.log(key,event.target.value,'fadsfa')
@@ -86,6 +90,17 @@ const Reports = () => {
             </Grid>
           
           </Grid>
+          <Box className="flex items-end justify-end gap-5 mt-5">
+            <Button variant="outlined" color="error" sx={{textTransform:'capitalize',}}>Cancel</Button>
+            <Button 
+              variant="contained" 
+              aria-describedby={"simple-popover"} 
+              onClick={handleSave} 
+              sx={{ textTransform: "capitalize", backgroundColor: Constant.bgColor, ":hover": { backgroundColor: Constant.bgColor } }}
+            >
+              Save & Continue
+            </Button>
+        </Box>
       </Box>
   </Box>
   )
