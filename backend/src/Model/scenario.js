@@ -1,28 +1,40 @@
+
 const mongoose = require('mongoose');
 
-const ScenerioSchema = new mongoose.Schema({
-    risk_scenario:{
-        type:String,
-        required:true,
+const TagSchema = new mongoose.Schema({
+    key: {
+        type: String,
+        required: true,
     },
-    risk_description:{
-        type:String,
+    value: {
+        type: String,
+        required: true,
     },
-    risk_field1:{
-        type:String,
-    },
-    risk_field2:{
-        type:String,
-    },
-    tags:{
-        type:[String],
-    },
-    status:{
-        type:Boolean,
-    },
-    save_as_draft:{
-        type:Boolean,
-    },
-})
+}, { _id: false });
 
-module.exports = mongoose.model('Scenerio',ScenerioSchema)
+const ScenarioSchema = new mongoose.Schema({
+    risk_scenario: {
+        type: String,
+        required: true,
+    },
+    risk_description: {
+        type: String,
+    },
+    risk_field1: {
+        type: String,
+    },
+    risk_field2: {
+        type: String,
+    },
+    tags: {
+        type: [TagSchema],
+    },
+    status: {
+        type: Boolean,
+    },
+    save_as_draft: {
+        type: Boolean,
+    },
+});
+
+module.exports = mongoose.model('Scenario', ScenarioSchema);

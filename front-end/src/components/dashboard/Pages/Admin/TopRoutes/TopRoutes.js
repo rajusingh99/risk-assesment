@@ -1,16 +1,26 @@
 
+
 import { Box, Button, FormControl, FormControlLabel, FormGroup, Grid, InputLabel, MenuItem, Popover, Select, Switch, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Constant } from '../../../../constant/sidebarLinks';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useNavigate } from 'react-router-dom';
 
 const TopRoutes = ({ route }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [checked,SetChecked] = useState(true);
+  const [checked, setChecked] = useState(true);
   const [tags, setTags] = useState([{ key: '', value: '' }]);
-  const [save_draft,setSaveAsDraft] = useState(false)
+  const [saveDraft, setSaveAsDraft] = useState(false);
+  const navigate = useNavigate()
+  const [formData, setFormData] = useState({
+    risk_scenario: '',
+    risk_description: '',
+    risk_field1: '',
+    risk_field2: ''
+  });
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -38,29 +48,78 @@ const TopRoutes = ({ route }) => {
     setTags(tags.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleStatusChange = () => {
+    setChecked((prevChecked) => !prevChecked);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    let tags = tags.filter(tag => tag.key && tag.value)
+    setSaveAsDraft(false)
+
     const risk = {
-      risk_scenario: data.get('risk_scenario'),
-      risk_description: data.get('risk_description'),
-      risk_field1: data.get('risk_field1'),
-      risk_field2: data.get('risk_field2'),
-      tags: tags, 
-      status:checked,
-      save_as_draft: save_draft
-    }
-    const Address = {
-      risk,tags
+      ...formData,
+      tags: tags.filter(tag => tag.key && tag.value),
+      status: checked,
+      save_as_draft: saveDraft
     };
 
-    console.log(Address, "Address");
+    try {
+      const response = await axios.post('http://localhost:4000/api/scenario/create', risk, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.status === 200) {
+        navigate('/library/risk-scenario');
+        console.log('Risk scenario created successfully:', response.data);
+      } else {
+        console.error('Failed to create risk scenario:', response.data);
+      }
+    } catch (error) {
+      console.error('An error occurred while creating the risk scenario:', error);
+    }
+
+    handleClose(); 
   };
-  const handleChange =()=>{
-   SetChecked((checked)=>!checked)
-  } 
- 
+
+  const handleDraft =async(e)=>{
+    e.preventDefault();
+    setSaveAsDraft(true)
+    const risk = {
+      ...formData,
+      tags: tags.filter(tag => tag.key && tag.value),
+      status: checked,
+      save_as_draft: saveDraft
+    };
+
+    try {
+      const response = await axios.post('http://localhost:4000/api/scenario/create', risk, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.status === 200) {
+        navigate('/library/risk-scenario');
+        console.log('Risk scenario created successfully:', response.data);
+      } else {
+        console.error('Failed to create risk scenario:', response.data);
+      }
+    } catch (error) {
+      console.error('An error occurred while creating the risk scenario:', error);
+    }
+
+    handleClose(); 
+  }
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
@@ -114,64 +173,67 @@ const TopRoutes = ({ route }) => {
               <Grid container sx={{ maxHeight: '60vh', overflowY: 'auto', pr: 2, pt: 2, boxShadow: "initial" }}>
                 <Grid item xs={12} mb={1} className="flex items-center justify-start gap-3">
                   <Typography>Status:</Typography>
-                    <FormGroup>
-                        <FormControlLabel sx={{color:checked? "#157A4E" : "",}} control={<Switch checked={checked}  onChange={handleChange} sx={{'& .MuiSwitch-switchBase.Mui-checked': { color: '#157A4E',},  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {  backgroundColor: '#157A4E',  },  }} />} label={checked ?"Enabled":"Disabled"}   />
-                   </FormGroup>
+                  <FormGroup>
+                    <FormControlLabel
+                      sx={{ color: checked ? "#157A4E" : "", }}
+                      control={<Switch checked={checked} onChange={handleStatusChange} sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#157A4E', }, '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': { backgroundColor: '#157A4E', }, }} />}
+                      label={checked ? "Enabled" : "Disabled"}
+                    />
+                  </FormGroup>
                 </Grid>
                 <Grid item xs={12} mb={3}>
-                  <TextField required id='risk_scenario' name='risk_scenario' label='Risk Scenario' fullWidth autoComplete='given-name' />
+                  <TextField required id='risk_scenario' name='risk_scenario' label='Risk Scenario' fullWidth autoComplete='given-name' value={formData.risk_scenario} onChange={handleChange} />
                 </Grid>
 
                 <Grid item xs={12} mb={3}>
-                  <TextField required id='risk_description' name='risk_description' label='Risk Description' fullWidth autoComplete='given-name' />
+                  <TextField required id='risk_description' name='risk_description' label='Risk Description' fullWidth autoComplete='given-name' value={formData.risk_description} onChange={handleChange} />
                 </Grid>
 
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6} mb={3}>
-                    <TextField id='risk_field1' name='risk_field1' label='Risk Field 1' fullWidth autoComplete='given-name' />
+                    <TextField id='risk_field1' name='risk_field1' label='Risk Field 1' fullWidth autoComplete='given-name' value={formData.risk_field1} onChange={handleChange} />
                   </Grid>
 
                   <Grid item xs={12} sm={6} mb={3}>
-                    <TextField id='risk_field2' name='risk_field2' label='Risk Field 2' fullWidth autoComplete='given-name' />
+                    <TextField id='risk_field2' name='risk_field2' label='Risk Field 2' fullWidth autoComplete='given-name' value={formData.risk_field2} onChange={handleChange} />
                   </Grid>
                 </Grid>
 
-                <Grid item xs={12} >
-                    {tags.map((tag, index) => (
-                      <Grid container spacing={2} key={index} alignItems="center" mb={3}>
-                        <Grid item xs={5}>
-                          <FormControl fullWidth>
-                            <InputLabel id={`tag_key_label_${index}`}>Key</InputLabel>
-                            <Select
-                              labelId={`tag_key_label_${index}`}
-                              id={`tag_key_${index}`}
-                              value={tag.key}
-                              label="Key"
-                              onChange={(e) => handleTagChange(index, 'key', e.target.value)}
-                            >
-                              {Constant.Tag_key.map((item, idx) =>
-                                <MenuItem key={idx} value={item.value}>{item.key}</MenuItem>
-                              )}
-                            </Select>
-                          </FormControl>
-                        </Grid>
-                        <Grid item xs={5}>
-                          <TextField
-                            id={`tag_value_${index}`}
-                            value={tag.value}
-                            label="Value"
-                            fullWidth
-                            onChange={(e) => handleTagChange(index, 'value', e.target.value)}
-                          />
-                        </Grid>
-                        <Grid item xs={2}>
-                          <Button variant="text" color="error" onClick={() => handleDeleteTag(index)}>
-                            <DeleteIcon />
-                          </Button>
-                        </Grid>
+                <Grid item xs={12}>
+                  {tags.map((tag, index) => (
+                    <Grid container spacing={2} key={index} alignItems="center" mb={3}>
+                      <Grid item xs={5}>
+                        <FormControl fullWidth>
+                          <InputLabel id={`tag_key_label_${index}`}>Key</InputLabel>
+                          <Select
+                            labelId={`tag_key_label_${index}`}
+                            id={`tag_key_${index}`}
+                            value={tag.key}
+                            label="Key"
+                            onChange={(e) => handleTagChange(index, 'key', e.target.value)}
+                          >
+                            {Constant.Tag_key.map((item, idx) =>
+                              <MenuItem key={idx} value={item.value}>{item.key}</MenuItem>
+                            )}
+                          </Select>
+                        </FormControl>
                       </Grid>
-                    ))}
-                  
+                      <Grid item xs={5}>
+                        <TextField
+                          id={`tag_value_${index}`}
+                          value={tag.value}
+                          label="Value"
+                          fullWidth
+                          onChange={(e) => handleTagChange(index, 'value', e.target.value)}
+                        />
+                      </Grid>
+                      <Grid item xs={2}>
+                        <Button variant="text" color="error" onClick={() => handleDeleteTag(index)}>
+                          <DeleteIcon />
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  ))}
                 </Grid>
 
                 <Grid item xs={12} mb={2}>
@@ -179,7 +241,7 @@ const TopRoutes = ({ route }) => {
                     <AddIcon sx={{ color: Constant.bgColor }} /> Add New Key
                   </Button>
                 </Grid>
-                
+
                 <Grid item xs={12}>
                   <Box className="flex items-center justify-between">
                     <Box>
@@ -187,7 +249,7 @@ const TopRoutes = ({ route }) => {
                     </Box>
 
                     <Box className="flex items-center justify-between gap-5">
-                      <Button variant="outlined" sx={{ textTransform: 'capitalize', }}>Save as Draft</Button>
+                      <Button onClick={handleDraft} variant="outlined" sx={{ textTransform: 'capitalize', }}>Save as Draft</Button>
                       <Button type='submit' size='large' variant='contained' sx={{ backgroundColor: Constant.bgColor, ':hover': { backgroundColor: Constant.bgColor } }}>Publish</Button>
                     </Box>
                   </Box>
@@ -202,4 +264,5 @@ const TopRoutes = ({ route }) => {
 };
 
 export default TopRoutes;
+
 

@@ -28,7 +28,7 @@ try{
 }catch(err){
     return res.status(400).json({
         success:false,
-        message:"Something went wrong in scenario controller"
+        message:`Something went wrong in scenario controller ${err.message}`
     })
 }
 }
@@ -39,7 +39,8 @@ exports.getAllScenario=async(req,res)=>{
         if(get_scenario){
             return res.status(200).json({
                 success:true,
-                message:"All scenario data has been successfully fatched"
+                message:"All scenario data has been successfully fatched",
+                data :get_scenario,
             })
         }
     }catch(err){
