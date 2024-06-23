@@ -5,8 +5,8 @@ require('dotenv').config();
 
 exports.register = async(req,res) => {
     try {
-        const {firstName,lastName,email,phone,password} = req.body;
-        if(!firstName || !lastName || !email || !phone || !password){
+        const {firstName,lastName,email,password} = req.body;
+        if(!firstName || !lastName || !email || !password){
             return res.status(400).json({
                 success:false,
                 msg:'All Fields are Requireds'
@@ -22,9 +22,9 @@ exports.register = async(req,res) => {
             })
         }
 
-        const hashPassword = await bcrypt(password,10);
+        const hashPassword = await bcrypt.hash(password,10);
 
-        const response = await User.create({firstName,lastName,email,phone,password:hashPassword});
+        const response = await User.create({firstName,lastName,email,password:hashPassword});
         if(response){
             return res.status(200).json({
                 success:true,
@@ -35,7 +35,7 @@ exports.register = async(req,res) => {
     } catch (error) {
         return res.status(500).json({
             success:false,
-            msg:'Internal Server Error'
+            msg:`Internal Server Error ${error.message}`
         })
     }
 }
@@ -77,5 +77,20 @@ exports.login = async(req,res) => {
             success:false,
             msg:'Internal Server Error'
         })
+    }
+}
+
+exports.logout = async(req,res)=>{
+    try {
+        res.clearCookie('token'); 
+        res.status(200).json({
+            success: true,
+            msg: 'User logged out successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            msg: `Internal Server Error: ${error.message}`
+        });
     }
 }
