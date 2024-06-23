@@ -110,8 +110,22 @@ export default function SideBar() {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseUserMenu = (path) => {
-    navigate(`${path}`)
+  const handleCloseUserMenu = async(path) => {
+    if(path==="/dashboard/logout"){
+      try {
+        const response = await axios.post('http://localhost:4000/api/logout');
+        if (response.status === 200) {
+            navigate('/login'); 
+        } else {
+            console.error('Logout failed:', response.data.msg);
+        }
+    } catch (error) {
+        console.error('Logout error:', error.message);
+    }
+    }
+    else {
+      navigate(`${path}`)
+    }
     setAnchorElUser(null);
   };
 
@@ -172,6 +186,7 @@ export default function SideBar() {
           </Box>
         </Toolbar>
       </AppBar>
+
       <Drawer variant="permanent" open={open} >
         <DrawerHeader>
            
