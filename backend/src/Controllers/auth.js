@@ -3,51 +3,16 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-<<<<<<< HEAD
+// Register endpoint
 exports.register = async (req, res) => {
   try {
-    const { firstName, lastName, email, phone, password } = req.body;
-    if (!firstName || !lastName || !email || !phone || !password) {
+    const { firstName, lastName, email, password } = req.body;
+    console.log("Data::", firstName);
+    if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({
         success: false,
-        msg: "All Fields are Requireds",
+        msg: "All Fields are Required",
       });
-=======
-exports.register = async(req,res) => {
-    try {
-        const {firstName,lastName,email,password} = req.body;
-        if(!firstName || !lastName || !email || !password){
-            return res.status(400).json({
-                success:false,
-                msg:'All Fields are Requireds'
-            })
-        }
-
-        const userExist = await User.findOne({email:email});
-
-        if(userExist){
-            return res.status(400).json({
-                success:false,
-                msg:'User Already Registered'
-            })
-        }
-
-        const hashPassword = await bcrypt.hash(password,10);
-
-        const response = await User.create({firstName,lastName,email,password:hashPassword});
-        if(response){
-            return res.status(200).json({
-                success:true,
-                msg:'User Register Successfully!'
-            })
-        }
-
-    } catch (error) {
-        return res.status(500).json({
-            success:false,
-            msg:`Internal Server Error ${error.message}`
-        })
->>>>>>> a441da9a9a19600dd55d9dffffe6b0318e33683a
     }
 
     const userExist = await User.findOne({ email: email });
@@ -58,24 +23,25 @@ exports.register = async(req,res) => {
         msg: "User Already Registered",
       });
     }
-<<<<<<< HEAD
 
-    const hashPassword = await bcrypt(password, 10);
+    // Correct use of bcrypt to hash the password
+    const hashPassword = await bcrypt.hash(password, 10);
 
     const response = await User.create({
       firstName,
       lastName,
       email,
-      phone,
       password: hashPassword,
     });
+
     if (response) {
       return res.status(200).json({
         success: true,
-        msg: "User Register Successfully!",
+        msg: "User Registered Successfully!",
       });
     }
   } catch (error) {
+    console.error(error); // Log the error for debugging
     return res.status(500).json({
       success: false,
       msg: "Internal Server Error",
@@ -83,13 +49,14 @@ exports.register = async(req,res) => {
   }
 };
 
+// Login endpoint
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(404).json({
+      return res.status(400).json({
         success: false,
-        msg: "All fields are Requireds",
+        msg: "All fields are Required",
       });
     }
 
@@ -112,13 +79,23 @@ exports.login = async (req, res) => {
       });
 
       return res
-        .cookies("token", token, { expiresIn: "2d", httpOnly: true })
+        .cookie("token", token, {
+          expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+          httpOnly: true,
+        })
         .json({
           success: true,
-          msg: "User Login Successfully!",
+          token: token,
+          msg: "User Logged In Successfully!",
         });
+    } else {
+      return res.status(401).json({
+        success: false,
+        msg: "Invalid Credentials",
+      });
     }
   } catch (error) {
+    console.error(error); // Log the error for debugging
     return res.status(500).json({
       success: false,
       msg: "Internal Server Error",
@@ -135,27 +112,10 @@ exports.logout = (req, res) => {
       msg: "User Logged Out Successfully!",
     });
   } catch (error) {
+    console.error(error); // Log the error for debugging
     return res.status(500).json({
       success: false,
       msg: "Internal Server Error",
     });
   }
 };
-=======
-}
-
-exports.logout = async(req,res)=>{
-    try {
-        res.clearCookie('token'); 
-        res.status(200).json({
-            success: true,
-            msg: 'User logged out successfully'
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            msg: `Internal Server Error: ${error.message}`
-        });
-    }
-}
->>>>>>> a441da9a9a19600dd55d9dffffe6b0318e33683a

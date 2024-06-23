@@ -1,4 +1,3 @@
-
 import React, { useCallback, useState } from "react";
 import {
   Box,
@@ -17,7 +16,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Constant } from "../constant/sidebarLinks";
 import CopyRight from "../dashboard/Pages/Admin/components/CopyRight";
-import axios from "axios"; 
+import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -32,7 +31,7 @@ const Login = () => {
       ...prev,
       [name]: e.target.value,
     }));
-  }
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -41,7 +40,8 @@ const Login = () => {
         email: formData.email,
         password: formData.password,
       });
-
+      const token = localStorage.setItem("token", response.data.token);
+      console.log("Token::", token);
       if (response.status === 200) {
         navigate("/");
       } else {
@@ -176,4 +176,3 @@ const Login = () => {
 };
 
 export default Login;
-

@@ -1,4 +1,3 @@
-
 import React, { useCallback, useState } from "react";
 import {
   Box,
@@ -15,7 +14,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';  // Import Axios
+import axios from "axios"; // Import Axios
 import { Constant } from "../constant/sidebarLinks";
 import CopyRight from "../dashboard/Pages/Admin/components/CopyRight";
 
@@ -39,11 +38,12 @@ const Signup = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4000/api/register", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:4000/api/register",
+        formData
+      );
+      console.log("response::", response);
+      console.log(response.data);
       if (response.status === 200) {
         navigate("/library");
       } else {
@@ -58,7 +58,12 @@ const Signup = () => {
 
   return (
     <Grid container m={2}>
-      <Grid item xs={12} lg={6} sx={{ backgroundColor: "#D9D9D9", width: "70%", borderRadius: '5px' }}>
+      <Grid
+        item
+        xs={12}
+        lg={6}
+        sx={{ backgroundColor: "#D9D9D9", width: "70%", borderRadius: "5px" }}
+      >
         {/* Left side content */}
       </Grid>
       <Grid item xs={12} lg={6}>
@@ -85,7 +90,12 @@ const Signup = () => {
             }}
           >
             <Stack spacing={2}>
-              <Typography align="center" component="h1" variant="h5" sx={{ mb: 1, color: "#434EB3" }}>
+              <Typography
+                align="center"
+                component="h1"
+                variant="h5"
+                sx={{ mb: 1, color: "#434EB3" }}
+              >
                 SignUp in bluOcean
               </Typography>
               <TextField
@@ -94,7 +104,7 @@ const Signup = () => {
                 onChange={(e) => {
                   handleChange(e, "firstName");
                 }}
-                sx={{ pb: '15px' }}
+                sx={{ pb: "15px" }}
                 name="firstName"
                 label="First Name"
                 variant="outlined"
@@ -106,7 +116,7 @@ const Signup = () => {
                 onChange={(e) => {
                   handleChange(e, "lastName");
                 }}
-                sx={{ pb: '15px' }}
+                sx={{ pb: "15px" }}
                 name="lastName"
                 label="Last Name"
                 variant="outlined"
@@ -118,7 +128,7 @@ const Signup = () => {
                 onChange={(e) => {
                   handleChange(e, "email");
                 }}
-                sx={{ pb: '15px' }}
+                sx={{ pb: "15px" }}
                 name="email"
                 label="Email"
                 variant="outlined"
@@ -141,7 +151,11 @@ const Signup = () => {
                         onClick={() => setShowPassword(!showPassword)}
                         edge="end"
                       >
-                        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                        {showPassword ? (
+                          <VisibilityIcon />
+                        ) : (
+                          <VisibilityOffIcon />
+                        )}
                       </IconButton>
                     </InputAdornment>
                   ),
@@ -167,14 +181,18 @@ const Signup = () => {
                   "&:hover": {
                     backgroundColor: Constant.bgColor,
                   },
-                  textTransform: 'capitalize'
+                  textTransform: "capitalize",
                 }}
               >
                 SignUp
               </Button>
               <Box className="">
-                <Typography className="opacity-50">Want to know more about BluOcean? </Typography>
-                <Link to="/login" style={{ color: Constant.bgColor }}>Login</Link>
+                <Typography className="opacity-50">
+                  Want to know more about BluOcean?{" "}
+                </Typography>
+                <Link to="/login" style={{ color: Constant.bgColor }}>
+                  Login
+                </Link>
               </Box>
             </Stack>
           </Paper>
@@ -186,4 +204,3 @@ const Signup = () => {
 };
 
 export default Signup;
-
