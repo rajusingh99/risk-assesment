@@ -72,9 +72,11 @@ const TopRoutes = ({ route }) => {
     };
 
     try {
+      const token = localStorage.getItem("token");
       const response = await axios.post('http://localhost:4000/api/scenario/create', risk, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         }
       });
 
