@@ -5,9 +5,11 @@ import CardHeader from './CardHeader';
 
 const ReportPiChart = () => {
     const data = [
-        { id: 0, value: 10, label: 'series A' },
-        { id: 1, value: 15, label: 'series B' },
-        { id: 2, value: 20, label: 'series C' },
+        { id: 0, value: 10, label: 'Rare' },
+        { id: 1, value: 15, label: 'Periodic' },
+        { id: 2, value:  7, label: 'Frequent' },
+        { id: 3, value: 14, label: 'Often' },
+        { id: 4, value: 16, label: 'Always' },
       ];
       
   return (

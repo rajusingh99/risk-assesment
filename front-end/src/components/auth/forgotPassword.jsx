@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { Constant } from "../constant/sidebarLinks";
+import CopyRight from "../dashboard/Pages/Admin/components/CopyRight";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -100,6 +101,7 @@ const ForgotPassword = () => {
         
         </Box>
       </Grid>
+      <CopyRight/>
     </Grid>
   );
 };

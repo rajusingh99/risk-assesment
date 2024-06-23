@@ -5,14 +5,17 @@ import TopRoutes from '../TopRoutes/TopRoutes'
 import SearchIcon from '@mui/icons-material/Search';
 import { Constant } from '../../../../constant/sidebarLinks';
 import AssessmentCard from './components/AssessmentCard';
+import CopyRight from '../components/CopyRight';
 
 const Assessment = () => {
   const route={
     title:"Assessment",
  }
   const [tabValue, setTabValue] = useState('likelihood'); 
+  const [activeScenario, setActiveScenario] = useState(null); 
   const [selectedScore, setSelectedScore] = useState({likelihood:'0',businessImpact:'0'});
 
+  console.log(activeScenario,'activeScenarioactiveScenario')
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -25,7 +28,7 @@ const Assessment = () => {
   };
 
   const handleSendToBackend = () => {
-    console.log('Sending to backend:', selectedScore);
+    console.log('Sending to backend:', activeScenario,selectedScore);
   };
 
   return (
@@ -57,7 +60,7 @@ const Assessment = () => {
                       </Box>
                       <Box sx={{overflowY:'auto',maxHeight:'40vh'}}>
                           {
-                            Constant.AssessmentData.map((item,index)=> <AssessmentCard item={item} index={index}/>)
+                            Constant.AssessmentData.map((item,index)=> <AssessmentCard item={item} index={index} setActiveScenario={setActiveScenario} activeScenario={activeScenario}/>)
                           }
                       </Box>
                   </Box>
@@ -96,11 +99,11 @@ const Assessment = () => {
                             )}
                             {tabValue === 'businessImpact' && (
                               <>
-                                <Button sx={{backgroundColor: selectedScore.likelihood === '1' ?"#DB7707" :"", ':hover':{backgroundColor:"#DB7707",color:'white'}}} variant={selectedScore.businessImpact === '1' ? 'contained' : 'outlined'}  onClick={() => handleScoreSelection('businessImpact','1')}>  Very Low</Button>
-                                <Button sx={{backgroundColor: selectedScore.likelihood === '2' ?"#DB7707" :"", ':hover':{backgroundColor:"#DB7707",color:'white'}}} variant={selectedScore.businessImpact === '2' ? 'contained' : 'outlined'}  onClick={() => handleScoreSelection('businessImpact','2')}>  Low</Button>
-                                <Button sx={{backgroundColor: selectedScore.likelihood === '3' ?"#DB7707" :"", ':hover':{backgroundColor:"#DB7707",color:'white'}}} variant={selectedScore.businessImpact === '3' ? 'contained' : 'outlined'}  onClick={() => handleScoreSelection('businessImpact','3')}>  Medium</Button>
-                                <Button sx={{backgroundColor: selectedScore.likelihood === '4' ?"#DB7707" :"", ':hover':{backgroundColor:"#DB7707",color:'white'}}} variant={selectedScore.businessImpact === '4' ? 'contained' : 'outlined'}  onClick={() => handleScoreSelection('businessImpact','4')}>  High</Button>
-                                <Button sx={{backgroundColor: selectedScore.likelihood === '5' ?"#DB7707" :"", ':hover':{backgroundColor:"#DB7707",color:'white'}}} variant={selectedScore.businessImpact === '5' ? 'contained' : 'outlined'}  onClick={() => handleScoreSelection('businessImpact','5')}>  Critical</Button>
+                                <Button sx={{backgroundColor: selectedScore.businessImpact === '1' ?"#DB7707" :"", ':hover':{backgroundColor:"#DB7707",color:'white'}}} variant={selectedScore.businessImpact === '1' ? 'contained' : 'outlined'}  onClick={() => handleScoreSelection('businessImpact','1')}>  Very Low</Button>
+                                <Button sx={{backgroundColor: selectedScore.businessImpact === '2' ?"#DB7707" :"", ':hover':{backgroundColor:"#DB7707",color:'white'}}} variant={selectedScore.businessImpact === '2' ? 'contained' : 'outlined'}  onClick={() => handleScoreSelection('businessImpact','2')}>  Low</Button>
+                                <Button sx={{backgroundColor: selectedScore.businessImpact === '3' ?"#DB7707" :"", ':hover':{backgroundColor:"#DB7707",color:'white'}}} variant={selectedScore.businessImpact === '3' ? 'contained' : 'outlined'}  onClick={() => handleScoreSelection('businessImpact','3')}>  Medium</Button>
+                                <Button sx={{backgroundColor: selectedScore.businessImpact === '4' ?"#DB7707" :"", ':hover':{backgroundColor:"#DB7707",color:'white'}}} variant={selectedScore.businessImpact === '4' ? 'contained' : 'outlined'}  onClick={() => handleScoreSelection('businessImpact','4')}>  High</Button>
+                                <Button sx={{backgroundColor: selectedScore.businessImpact === '5' ?"#DB7707" :"", ':hover':{backgroundColor:"#DB7707",color:'white'}}} variant={selectedScore.businessImpact === '5' ? 'contained' : 'outlined'}  onClick={() => handleScoreSelection('businessImpact','5')} >  Critical</Button>
                               </>
                             )}
                           </Box>
@@ -115,17 +118,23 @@ const Assessment = () => {
             </Grid>
           </Box>
 
-        <Box className="flex items-end justify-end gap-5 mt-5">
-          <Button variant="outlined" color="error" sx={{textTransform:'capitalize',}}>Cancel</Button>
-          <Button 
-            variant="contained" 
-            aria-describedby={"simple-popover"} 
-            onClick={handleSendToBackend} 
-            sx={{ textTransform: "capitalize", backgroundColor: Constant.bgColor, ":hover": { backgroundColor: Constant.bgColor } }}
-          >
-            Save & Continue
-          </Button>
+        <Box className="flex items-center justify-between gap-5 mt-5">
+            <Box className="flex">
+                <CopyRight/>
+            </Box>
+          <Box className="flex items-center justify-between gap-5">
+            <Button variant="outlined" color="error" sx={{textTransform:'capitalize',}}>Cancel</Button>
+            <Button 
+              variant="contained" 
+              aria-describedby={"simple-popover"} 
+              onClick={handleSendToBackend} 
+              sx={{ textTransform: "capitalize", backgroundColor: Constant.bgColor, ":hover": { backgroundColor: Constant.bgColor } }}
+            >
+              Save & Continue
+            </Button>
+          </Box>
         </Box>
+
         </Box>
     </Box>
   )

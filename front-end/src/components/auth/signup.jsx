@@ -15,6 +15,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Constant } from "../constant/sidebarLinks";
+import CopyRight from "../dashboard/Pages/Admin/components/CopyRight";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -163,6 +164,7 @@ const Signup = () => {
             </Paper>
           </Box>
         </Grid>
+        <CopyRight/>
     </Grid>
   );
 };

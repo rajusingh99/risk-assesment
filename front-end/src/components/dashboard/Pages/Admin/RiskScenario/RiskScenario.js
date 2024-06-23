@@ -7,6 +7,7 @@ import { Constant } from '../../../../constant/sidebarLinks';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import TablePagination from '@mui/material/TablePagination';
+import CopyRight from '../components/CopyRight';
 
 const RiskScenario = () => {
   const [sort, setSort] = useState('');
@@ -85,10 +86,14 @@ const RiskScenario = () => {
             page={page}
             onPageChange={handleChangePage}
             rowsPerPage={rowsPerPage}
-            rowsPerPageOptions={[6]}
+            rowsPerPageOptions={[6,25,50,100]}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Box>
+
+          <Box className="flex items-center">
+                <CopyRight/>
+            </Box>
       </Box>
     </Box>
   );
