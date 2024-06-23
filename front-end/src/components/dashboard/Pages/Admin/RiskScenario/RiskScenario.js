@@ -53,7 +53,7 @@ const RiskScenario = () => {
             </Box>
         </Box>
       {
-        Constant.RiskScenario.map((item,index)=><ScenarioCard item={item} index={index}/>)
+        Constant.RiskScenario.map((item,index)=><ScenarioCard item={item} index={index} />)
       }
       </Box>
   </Box>
